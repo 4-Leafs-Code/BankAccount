@@ -1,5 +1,5 @@
-class BankAccount():
-    def __init__(self,label):
+class BankAccount(object):
+    def __init__(self, label):
         self.name = label
         self.balance = 0
 
@@ -37,10 +37,32 @@ class BankAccount():
 
 class Checking(BankAccount):
     def __init__(self):
-        self.last_check = 0000
-        self.check_limit = 0
-        self.print_check = False
+        self.last = 0
+        self.limit = 0
+        super().__init__( "My Checking")
+
+    def last_check(self):
+        if self.last == 1000:
+            self.last = ""
+        return "{0:0>4}".format(self.last)
+
+    def print_check(self,amount):
+        if amount > self.limit:
+            print("Error: amount exceeds account limit")
+        elif amount > self.balance:
+            print("Error: amount exceeds account balance")
+        else:
+            self.withdraw(amount)
+            self.last += 1
+            amount = '{:04.2f}'.format(amount)
+            print("Check #" + self.last_check(), "for $" + amount, " printed")
 
 
-    def check(self):
-        pass
+class Savings(BankAccount):
+    def __init__(self):
+        self.rate = 0
+        super().__init__("My Savings")
+
+    def accure(self, period):
+        self.balance += self.balance * self.rate * period
+        return self.balance
